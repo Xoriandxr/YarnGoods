@@ -426,6 +426,50 @@ img{
 body{
   overflow-x:hidden;
 }
+
+.payment-box{
+  margin-top:1rem;
+  padding:1rem;
+  border-radius:1.2rem;
+  background:linear-gradient(135deg,#f0fff4,#f8fff9);
+  border:2px solid #25D366;
+  text-align:center;
+}
+
+.payment-box h3{
+  color:#128C7E;
+  margin-bottom:0.5rem;
+}
+
+.payment-text{
+  color:#555;
+  margin-bottom:0.5rem;
+}
+
+.pay-number{
+  font-size:1.35rem;
+  font-weight:800;
+  color:#25D366;
+  margin-bottom:0.35rem;
+}
+
+.pay-name{
+  font-size:0.9rem;
+  color:#444;
+  margin-bottom:0.5rem;
+}
+
+.pay-total{
+  font-size:1rem;
+  font-weight:700;
+  margin-bottom:0.5rem;
+}
+
+.payment-note{
+  font-size:0.8rem;
+  color:#666;
+}
+
 </style>
 </head>
 <body>
@@ -718,7 +762,7 @@ body{
    Pakistan example: 923001234567
    (92 = Pakistan country code, then your 10-digit number)
    ══════════════════════════════════════════════════════════ */
-const WHATSAPP_NUMBER = "923332369143";
+const WHATSAPP_NUMBER = "923331234567";
 
 
 /* ══════════════════════════════════════════════════════════
@@ -799,6 +843,7 @@ let qty = 1;
 let currentProduct = null;
 let selectedColor = null;
 const DELIVERY_FEE = 299;
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7xIDJWdZBq_Mma0ttrRetIUelQw5pqil_C77Z3PiviC-QTq5QOHJnzr0PHI1UCEJX/exec";
     
 function subtotalOnly() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -875,6 +920,11 @@ function updateCartUI() {
   document.getElementById("cartCount").textContent = total;
   document.getElementById("cartSubtotal").textContent = `PKR ${subtotalOnly().toLocaleString()}`;
   document.getElementById("cartTotal").textContent = `PKR ${cartTotal().toLocaleString()}`;
+
+  const paymentAmountEl = document.getElementById("paymentAmount");
+  if(paymentAmountEl){
+    paymentAmountEl.textContent = cartTotal().toLocaleString();
+  }
   const btn = document.getElementById("checkoutBtn");
   btn.disabled = cart.length === 0;
 }
@@ -1122,4 +1172,48 @@ updateCartUI();
     font-size:0.92rem;
   }
 }
+
+.payment-box{
+  margin-top:1rem;
+  padding:1rem;
+  border-radius:1.2rem;
+  background:linear-gradient(135deg,#f0fff4,#f8fff9);
+  border:2px solid #25D366;
+  text-align:center;
+}
+
+.payment-box h3{
+  color:#128C7E;
+  margin-bottom:0.5rem;
+}
+
+.payment-text{
+  color:#555;
+  margin-bottom:0.5rem;
+}
+
+.pay-number{
+  font-size:1.35rem;
+  font-weight:800;
+  color:#25D366;
+  margin-bottom:0.35rem;
+}
+
+.pay-name{
+  font-size:0.9rem;
+  color:#444;
+  margin-bottom:0.5rem;
+}
+
+.pay-total{
+  font-size:1rem;
+  font-weight:700;
+  margin-bottom:0.5rem;
+}
+
+.payment-note{
+  font-size:0.8rem;
+  color:#666;
+}
+
 </style>
