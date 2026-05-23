@@ -762,7 +762,7 @@ body{
    Pakistan example: 923001234567
    (92 = Pakistan country code, then your 10-digit number)
    ══════════════════════════════════════════════════════════ */
-const WHATSAPP_NUMBER = "923331234567";
+const WHATSAPP_NUMBER = "923332369143";
 
 
 /* ══════════════════════════════════════════════════════════
@@ -1073,11 +1073,14 @@ document.getElementById("sendWaBtn").addEventListener("click", async () => {
     `${i.name} x${i.qty}`
   ).join(", ");
 
+  // SAVE PHONE AS TEXT (keeps starting 0)
+  const formattedPhone = "'" + phone;
+
   // DATA FOR GOOGLE SHEETS
   const orderData = {
     orderId: orderId,
     name: name,
-    phone: phone,
+    phone: formattedPhone,
     city: city,
     address: address,
     items: itemsText,
@@ -1087,20 +1090,6 @@ document.getElementById("sendWaBtn").addEventListener("click", async () => {
     notes: notes,
     time: new Date().toLocaleString()
   };
-
-  // SEND TO GOOGLE SHEETS
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(orderData)
-    });
-  } catch (err) {
-    console.log("Google Sheets Error:", err);
-  }
 
   // WHATSAPP MESSAGE
   const message = `
@@ -1126,13 +1115,27 @@ ${itemsText}
 ${notes || "None"}
 `;
 
-  // OPEN WHATSAPP
+  // OPEN WHATSAPP IMMEDIATELY
   const whatsappURL =
     `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
   window.open(whatsappURL, "_blank");
 
-  // CLEAR CART AFTER ORDER
+  // SEND TO GOOGLE SHEETS
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(orderData)
+    });
+  } catch (err) {
+    console.log("Google Sheets Error:", err);
+  }
+
+  // CLEAR CART
   cart = [];
   updateCartUI();
   renderCartItems();
