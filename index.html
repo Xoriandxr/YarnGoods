@@ -759,7 +759,7 @@ body{
    ──────────────────────────────────────────────────────────
    Replace YOUR_WHATSAPP_NUMBER with your number.
    Format: country code + number, NO spaces, NO + sign.
-   Pakistan example: 923001234567
+   Pakistan example: 923332369143
    (92 = Pakistan country code, then your 10-digit number)
    ══════════════════════════════════════════════════════════ */
 const WHATSAPP_NUMBER = "923332369143";
@@ -1066,7 +1066,7 @@ document.getElementById("sendWaBtn").addEventListener("click", async () => {
     "YG-" +
     Date.now().toString().slice(-6) +
     "-" +
-    Math.floor(Math.random() * 999);
+    Math.floor(Math.random() * 99);
 
   // ORDER ITEMS
   const itemsText = cart.map(i =>
