@@ -762,7 +762,7 @@ body{
    Pakistan example: 923001234567
    (92 = Pakistan country code, then your 10-digit number)
    ══════════════════════════════════════════════════════════ */
-const WHATSAPP_NUMBER = "923332369143";
+const WHATSAPP_NUMBER = "923331234567";
 
 
 /* ══════════════════════════════════════════════════════════
@@ -843,7 +843,7 @@ let qty = 1;
 let currentProduct = null;
 let selectedColor = null;
 const DELIVERY_FEE = 299;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyh_aM54DYkxP_OtI-WAiX8oK_9he95q5hc-uI2X1RFJYgqyuAWNeoIvwGIQWdmn_Uq/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7xIDJWdZBq_Mma0ttrRetIUelQw5pqil_C77Z3PiviC-QTq5QOHJnzr0PHI1UCEJX/exec";
     
 function subtotalOnly() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -1048,50 +1048,100 @@ document.getElementById("checkoutModal").addEventListener("click", e => { if(e.t
 /* ─────────────────────────────── */
 /* SEND TO WHATSAPP                 */
 /* ─────────────────────────────── */
-document.getElementById("sendWaBtn").addEventListener("click", () => {
-  const name    = document.getElementById("cfName").value.trim();
-  const phone   = document.getElementById("cfPhone").value.trim();
-  const city    = document.getElementById("cfCity").value.trim();
+document.getElementById("sendWaBtn").addEventListener("click", async () => {
+
+  const name = document.getElementById("cfName").value.trim();
+  const phone = document.getElementById("cfPhone").value.trim();
+  const city = document.getElementById("cfCity").value.trim();
   const address = document.getElementById("cfAddress").value.trim();
-  const notes   = document.getElementById("cfNotes").value.trim();
+  const notes = document.getElementById("cfNotes").value.trim();
 
-  if(!name || !phone || !city || !address) {
-    showToast("Please fill in all required fields 🌸");
+  if (!name || !phone || !city || !address) {
+    alert("Please fill all required fields 🌸");
     return;
   }
 
-  // Build the WhatsApp message
-  let msg = `🧶 *New Order — YarnGoods*\n\n`;
-  msg += `*Customer Details*\n`;
-  msg += `👤 Name: ${name}\n`;
-  msg += `📱 WhatsApp: ${phone}\n`;
-  msg += `🏙️ City: ${city}\n`;
-  msg += `📦 Address: ${address}\n`;
-  if(notes) msg += `📝 Notes: ${notes}\n`;
-  msg += `\n*Order Items*\n`;
-  cart.forEach(i => {
-    msg += `• ${i.name} x${i.qty} — PKR ${(i.price*i.qty).toLocaleString()}\n`;
-  });
-  msg += `\n🧾 Subtotal: PKR ${subtotalOnly().toLocaleString()}\n`;
-  msg += `🚚 Delivery: PKR ${DELIVERY_FEE}\n`;
-  msg += `💰 *Total: PKR ${cartTotal().toLocaleString()}*\n`;
-  msg += `\n_(Sent from YarnGoods website)_`;
+  // UNIQUE ORDER ID
+  const orderId =
+    "YG-" +
+    Date.now().toString().slice(-6) +
+    "-" +
+    Math.floor(Math.random() * 999);
 
-  const encoded = encodeURIComponent(msg);
-  const waURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+  // ORDER ITEMS
+  const itemsText = cart.map(i =>
+    `${i.name} x${i.qty}`
+  ).join(", ");
 
-  if(WHATSAPP_NUMBER === "YOUR_WHATSAPP_NUMBER") {
-    showToast("⚠️ Add your WhatsApp number in the code first!");
-    return;
+  // DATA FOR GOOGLE SHEETS
+  const orderData = {
+    orderId: orderId,
+    name: name,
+    phone: phone,
+    city: city,
+    address: address,
+    items: itemsText,
+    subtotal: subtotalOnly(),
+    delivery: DELIVERY_FEE,
+    total: cartTotal(),
+    notes: notes,
+    time: new Date().toLocaleString()
+  };
+
+  // SEND TO GOOGLE SHEETS
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(orderData)
+    });
+  } catch (err) {
+    console.log("Google Sheets Error:", err);
   }
 
-  window.open(waURL, "_blank");
+  // WHATSAPP MESSAGE
+  const message = `
+🧶 *NEW YARNGOODS ORDER*
 
-  // Clear cart after sending
+🆔 Order ID: *${orderId}*
+
+👤 Name: ${name}
+📱 Phone: ${phone}
+🏙️ City: ${city}
+
+📍 Address:
+${address}
+
+🛍️ Items:
+${itemsText}
+
+💵 Subtotal: PKR ${subtotalOnly().toLocaleString()}
+🚚 Delivery: PKR ${DELIVERY_FEE}
+💰 Total: PKR ${cartTotal().toLocaleString()}
+
+📝 Notes:
+${notes || "None"}
+`;
+
+  // OPEN WHATSAPP
+  const whatsappURL =
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+  window.open(whatsappURL, "_blank");
+
+  // CLEAR CART AFTER ORDER
   cart = [];
   updateCartUI();
+  renderCartItems();
+
+  // CLOSE CHECKOUT
   closeCheckout();
-  showToast("Order sent! We'll confirm shortly 🌸");
+
+  showToast(`Order ${orderId} sent successfully 🌸`);
+
 });
 
 /* ─────────────────────────────── */
