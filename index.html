@@ -1063,10 +1063,10 @@ document.getElementById("sendWaBtn").addEventListener("click", async () => {
 
   // UNIQUE ORDER ID
   const orderId =
-    "YG-" +
+    "ID-" +
     Date.now().toString().slice(-6) +
     "-" +
-    Math.floor(Math.random() * 99);
+    Math.floor(Math.random() * 9);
 
   // ORDER ITEMS
   const itemsText = cart.map(i =>
@@ -1093,8 +1093,6 @@ document.getElementById("sendWaBtn").addEventListener("click", async () => {
 
   // WHATSAPP MESSAGE
   const message = `
-🧶 *NEW YARNGOODS ORDER*
-
 🆔 Order ID: *${orderId}*
 
 👤 Name: ${name}
@@ -1108,7 +1106,6 @@ ${address}
 ${itemsText}
 
 💵 Subtotal: PKR ${subtotalOnly().toLocaleString()}
-🚚 Delivery: PKR ${DELIVERY_FEE}
 💰 Total: PKR ${cartTotal().toLocaleString()}
 
 📝 Notes:
