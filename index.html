@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YarnGoods — Handmade Crochet</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   YARNGOOODS — CUSTOMIZATION GUIDE
+   ──────────────────────────────────────────
+   COLORS: edit the values in :root below
+   PRODUCTS: find "const products = [" in <script>
+   WHATSAPP: find "YOUR_WHATSAPP_NUMBER" below
+   INSTAGRAM: find "theyarngoods" to update handle
+   PRICES: in products array, edit priceLabel & price
+   ══════════════════════════════════════════ */
+
+:root {
+  /* ── BRAND COLORS — change these to restyle everything ── */
+  --blush:    #fde8e8;
+  --rose:     #f4b8b8;
+  --lilac:    #ede0f7;
+  --lavender: #c9aee8;
+  --mint:     #d6f5ec;
+  --sage:     #9ed8c4;
+  --cream:    #fdf8f0;
+  --butter:   #fef3d0;
+  --peach:    #fde4c8;
+  --apricot:  #f8c49a;
+  --text:     #5a3e5a;
+  --muted:    #9a7a9a;
+  --white:    #ffffff;
+  --radius-pill: 999px;
+  --radius-blob: 2rem;
+  --shadow-card: 0 2px 16px rgba(180,130,180,0.13);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* ── BLOBS ── */
+.blob-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob-bg span{position:absolute;border-radius:50%;opacity:0.18;filter:blur(60px);animation:blobdrift 18s ease-in-out infinite alternate;}
+.blob-bg span:nth-child(1){width:420px;height:420px;background:var(--rose);top:-80px;left:-100px;animation-delay:0s;}
+.blob-bg span:nth-child(2){width:320px;height:320px;background:var(--lavender);top:30%;right:-80px;animation-delay:-6s;}
+.blob-bg span:nth-child(3){width:280px;height:280px;background:var(--sage);bottom:10%;left:5%;animation-delay:-12s;}
+.blob-bg span:nth-child(4){width:220px;height:220px;background:var(--apricot);bottom:30%;right:10%;animation-delay:-3s;}
+@keyframes blobdrift{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-30px) scale(1.08);}}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(253,248,240,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1.5px solid var(--rose);padding:0.75rem 2rem;display:flex;align-items:center;justify-content:space-between;animation:slideDown 0.5s ease;}
+@keyframes slideDown{from{transform:translateY(-100%);opacity:0;}to{transform:none;opacity:1;}}
+.nav-logo{font-family:'Pacifico',cursive;font-size:1.5rem;color:var(--lavender);text-decoration:none;}
+.nav-logo span{color:var(--rose);}
+.nav-links{display:flex;gap:0.4rem;align-items:center;}
+.nav-links a{font-size:0.82rem;font-weight:600;color:var(--muted);text-decoration:none;padding:0.35rem 0.8rem;border-radius:var(--radius-pill);transition:background 0.2s,color 0.2s;}
+.nav-links a:hover{background:var(--blush);color:var(--text);}
+.nav-cart{background:var(--lavender);color:var(--white);border:none;border-radius:var(--radius-pill);padding:0.45rem 1.1rem;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;transition:transform 0.15s,background 0.2s;display:flex;align-items:center;gap:0.4rem;}
+.nav-cart:hover{background:#b89dd4;transform:scale(1.04);}
+.cart-bubble{background:var(--rose);color:var(--white);border-radius:50%;width:20px;height:20px;font-size:0.68rem;display:flex;align-items:center;justify-content:center;font-weight:700;}
+
+/* ── LAYOUT WRAPPER (desktop centering) ── */
+.page-wrap{max-width:1100px;margin:0 auto;padding:0 1.5rem;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+
+/* ── HERO ── */
+.hero{position:relative;z-index:1;padding:4rem 2rem 3rem;min-height:90svh;display:flex;align-items:center;}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+.hero-badge{display:inline-block;background:var(--butter);color:var(--muted);border-radius:var(--radius-pill);font-size:0.72rem;font-weight:700;padding:0.3rem 1rem;letter-spacing:0.07em;text-transform:uppercase;border:1.5px solid var(--apricot);animation:popIn 0.6s ease 0.2s both;}
+.hero h1{font-family:'Pacifico',cursive;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.15;margin:0.6rem 0 0.9rem;animation:popIn 0.6s ease 0.35s both;}
+.hero h1 .accent{color:var(--lavender);}
+.hero p{font-size:1rem;color:var(--muted);max-width:400px;line-height:1.7;font-weight:500;animation:popIn 0.6s ease 0.5s both;}
+.hero-btns{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.25rem;animation:popIn 0.6s ease 0.65s both;}
+.hero-right{display:flex;align-items:center;justify-content:center;font-size:clamp(7rem,15vw,12rem);animation:float 4s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(180,130,180,0.22));}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+@keyframes popIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+
+/* ── BUTTONS ── */
+.btn-primary{background:linear-gradient(135deg,var(--lavender),#d4b8f0);color:var(--white);border:none;border-radius:var(--radius-pill);padding:0.78rem 1.9rem;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(180,130,220,0.3);transition:transform 0.15s,box-shadow 0.15s;text-decoration:none;display:inline-block;}
+.btn-primary:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 8px 28px rgba(180,130,220,0.4);}
+.btn-secondary{background:var(--white);color:var(--text);border:1.5px solid var(--rose);border-radius:var(--radius-pill);padding:0.76rem 1.6rem;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:background 0.15s,transform 0.15s;text-decoration:none;display:inline-block;}
+.btn-secondary:hover{background:var(--blush);transform:translateY(-2px);}
+
+/* ── SECTIONS ── */
+.section{position:relative;z-index:1;padding:3rem 2rem;}
+.section-title{font-family:'Pacifico',cursive;font-size:clamp(1.6rem,3vw,2rem);color:var(--text);text-align:center;margin-bottom:0.35rem;}
+.section-sub{text-align:center;color:var(--muted);font-size:0.88rem;margin-bottom:1.75rem;}
+
+/* ── CATEGORIES ── */
+.categories{display:flex;gap:0.65rem;overflow-x:auto;padding-bottom:0.5rem;scrollbar-width:none;flex-wrap:wrap;}
+.categories::-webkit-scrollbar{display:none;}
+.cat-pill{flex-shrink:0;background:var(--white);border:1.5px solid var(--rose);border-radius:var(--radius-pill);padding:0.5rem 1.2rem;font-size:0.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.cat-pill:hover,.cat-pill.active{background:var(--blush);color:var(--text);border-color:var(--lavender);transform:scale(1.04);}
+
+/* ── PRODUCT GRID ── */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;}
+.product-card{background:var(--white);border-radius:var(--radius-blob);overflow:hidden;box-shadow:var(--shadow-card);transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;position:relative;}
+.product-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 40px rgba(180,130,180,0.22);}
+.product-img-placeholder{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;}
+/* ── PRODUCT IMAGE (real photo support) ── */
+.product-img-placeholder img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:0;}
+.card-badge{position:absolute;top:0.65rem;left:0.65rem;background:var(--lavender);color:var(--white);font-size:0.62rem;font-weight:700;letter-spacing:0.05em;padding:0.22rem 0.65rem;border-radius:var(--radius-pill);text-transform:uppercase;}
+.card-badge.new{background:var(--sage);color:#2a6b5c;}
+.card-fav{position:absolute;top:0.65rem;right:0.65rem;background:var(--white);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;box-shadow:0 1px 6px rgba(180,130,180,0.18);}
+.card-fav:hover{transform:scale(1.2);}
+.card-body{padding:0.9rem;}
+.card-name{font-weight:700;font-size:0.9rem;color:var(--text);margin-bottom:0.2rem;}
+.card-desc{font-size:0.73rem;color:var(--muted);margin-bottom:0.6rem;line-height:1.45;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
+.card-price{font-weight:700;font-size:1rem;color:var(--lavender);}
+.card-add{background:var(--blush);border:none;border-radius:var(--radius-pill);width:30px;height:30px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--lavender);transition:background 0.2s,transform 0.15s;}
+.card-add:hover{background:var(--lavender);color:var(--white);transform:scale(1.12);}
+
+.bg-blush{background:linear-gradient(135deg,var(--blush),var(--peach));}
+.bg-lilac{background:linear-gradient(135deg,var(--lilac),#e8d5fa);}
+.bg-mint{background:linear-gradient(135deg,var(--mint),#c2edd8);}
+.bg-butter{background:linear-gradient(135deg,var(--butter),#fde8b0);}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;}
+.feature-pill{background:var(--white);border:1.5px solid var(--blush);border-radius:var(--radius-blob);padding:1rem;text-align:center;}
+.feature-icon{font-size:1.8rem;display:block;margin-bottom:0.3rem;}
+.feature-label{font-size:0.78rem;font-weight:700;color:var(--text);}
+.feature-sub{font-size:0.68rem;color:var(--muted);margin-top:0.1rem;}
+
+/* ── TESTIMONIALS ── */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+.testi-card{background:var(--white);border-radius:var(--radius-blob);padding:1.2rem;box-shadow:var(--shadow-card);}
+.testi-quote{font-size:2rem;color:var(--rose);line-height:1;margin-bottom:0.3rem;}
+.testi-text{font-size:0.86rem;color:var(--text);line-height:1.6;font-weight:500;}
+.testi-author{margin-top:0.65rem;display:flex;align-items:center;gap:0.5rem;}
+.testi-avatar{width:34px;height:34px;border-radius:50%;background:var(--blush);display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
+.testi-name{font-size:0.78rem;font-weight:700;color:var(--muted);}
+.testi-stars{font-size:0.72rem;color:var(--apricot);}
+
+/* ── INSTAGRAM ── */
+.insta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.75rem;}
+.insta-tile{aspect-ratio:1/1;border-radius:1.2rem;display:flex;align-items:center;justify-content:center;font-size:2.8rem;cursor:pointer;transition:transform 0.2s;overflow:hidden;position:relative;}
+.insta-tile:hover{transform:scale(1.06);}
+.insta-overlay{position:absolute;inset:0;background:rgba(160,110,200,0.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;border-radius:1.2rem;color:white;font-size:0.75rem;font-weight:700;}
+.insta-tile:hover .insta-overlay{opacity:1;}
+
+/* ── ABOUT ── */
+.about-box{background:var(--white);border-radius:var(--radius-blob);padding:2.5rem;box-shadow:var(--shadow-card);display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;}
+.about-emoji{font-size:5rem;text-align:center;}
+.about-text h3{font-family:'Pacifico',cursive;font-size:1.5rem;margin-bottom:0.6rem;}
+.about-text p{font-size:0.9rem;line-height:1.75;color:var(--muted);}
+
+/* ── NEWSLETTER ── */
+.newsletter-box{background:linear-gradient(135deg,var(--lilac),var(--blush));border-radius:var(--radius-blob);padding:2.5rem;text-align:center;}
+.newsletter-box h3{font-family:'Pacifico',cursive;font-size:1.5rem;margin-bottom:0.4rem;}
+.newsletter-box p{font-size:0.85rem;color:var(--muted);margin-bottom:1.2rem;}
+.nl-form{display:flex;gap:0.5rem;max-width:380px;margin:0 auto;}
+.nl-input{flex:1;padding:0.65rem 1rem;border-radius:var(--radius-pill);border:1.5px solid var(--rose);background:var(--white);font-family:'Nunito',sans-serif;font-size:0.85rem;color:var(--text);outline:none;}
+.nl-input:focus{border-color:var(--lavender);}
+.nl-btn{background:var(--lavender);color:var(--white);border:none;border-radius:var(--radius-pill);padding:0.65rem 1.2rem;font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:background 0.2s;white-space:nowrap;}
+.nl-btn:hover{background:#b89dd4;}
+
+/* ── FOOTER ── */
+footer{background:var(--white);border-top:1.5px solid var(--blush);padding:2.5rem 2rem 2rem;position:relative;z-index:1;}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;margin-bottom:2rem;}
+.footer-brand .footer-logo{font-family:'Pacifico',cursive;font-size:1.7rem;color:var(--lavender);}
+.footer-brand p{font-size:0.78rem;color:var(--muted);margin-top:0.4rem;line-height:1.6;}
+.footer-col h4{font-size:0.78rem;font-weight:700;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;}
+.footer-col a{display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;margin-bottom:0.4rem;transition:color 0.2s;}
+.footer-col a:hover{color:var(--lavender);}
+.footer-social{display:flex;gap:0.6rem;margin-top:0.75rem;}
+.social-btn{background:var(--blush);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s,transform 0.15s;}
+.social-btn:hover{background:var(--lavender);transform:scale(1.1);}
+.footer-bottom{max-width:1100px;margin:0 auto;border-top:1px solid var(--blush);padding-top:1rem;text-align:center;font-size:0.72rem;color:var(--muted);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--lavender);color:var(--white);padding:0.7rem 1.5rem;border-radius:var(--radius-pill);font-size:0.87rem;font-weight:700;z-index:999;box-shadow:0 4px 20px rgba(180,130,220,0.35);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ══════════════════════════════
+   CART DRAWER
+══════════════════════════════ */
+.cart-overlay{position:fixed;inset:0;background:rgba(90,62,90,0.35);backdrop-filter:blur(6px);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.cart-overlay.open{opacity:1;pointer-events:all;}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--white);box-shadow:-4px 0 40px rgba(180,130,180,0.18);z-index:301;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);display:flex;flex-direction:column;}
+.cart-overlay.open .cart-drawer{transform:none;}
+.cart-header{padding:1.25rem 1.5rem;border-bottom:1.5px solid var(--blush);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.cart-header h2{font-family:'Pacifico',cursive;font-size:1.3rem;color:var(--text);}
+.cart-close{background:var(--blush);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.cart-close:hover{background:var(--rose);}
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem;}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:0.9rem;}
+.cart-empty .empty-icon{font-size:3rem;display:block;margin-bottom:0.75rem;}
+.cart-item{display:grid;grid-template-columns:56px 1fr auto;gap:0.85rem;align-items:center;padding:0.9rem 0;border-bottom:1px solid var(--blush);}
+.cart-item:last-child{border-bottom:none;}
+.ci-img{width:56px;height:56px;border-radius:0.85rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;}
+.ci-name{font-weight:700;font-size:0.85rem;color:var(--text);}
+.ci-color{font-size:0.72rem;color:var(--muted);margin:0.15rem 0;}
+.ci-qty-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.3rem;}
+.ci-qty-btn{background:var(--blush);border:none;border-radius:50%;width:22px;height:22px;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--lavender);}
+.ci-qty-btn:hover{background:var(--lavender);color:var(--white);}
+.ci-qty{font-size:0.82rem;font-weight:700;min-width:16px;text-align:center;}
+.ci-price{font-weight:700;font-size:0.9rem;color:var(--lavender);white-space:nowrap;}
+.ci-remove{background:none;border:none;cursor:pointer;font-size:0.75rem;color:var(--muted);margin-top:0.25rem;transition:color 0.2s;}
+.ci-remove:hover{color:#e08080;}
+.cart-footer{padding:1.25rem 1.5rem;border-top:1.5px solid var(--blush);flex-shrink:0;background:var(--cream);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.cart-total-label{font-size:0.82rem;color:var(--muted);font-weight:600;}
+.cart-total-amt{font-family:'Pacifico',cursive;font-size:1.4rem;color:var(--lavender);}
+.checkout-btn{width:100%;background:linear-gradient(135deg,#25D366,#128C7E);color:var(--white);border:none;border-radius:var(--radius-pill);padding:0.9rem;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;transition:opacity 0.2s,transform 0.15s;box-shadow:0 4px 18px rgba(37,211,102,0.3);}
+.checkout-btn:hover{opacity:0.92;transform:scale(1.02);}
+.checkout-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.whatsapp-icon{width:22px;height:22px;}
+
+/* ══════════════════════════════
+   CHECKOUT MODAL (customer info)
+══════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(90,62,90,0.4);backdrop-filter:blur(8px);z-index:400;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-sheet{background:var(--white);border-radius:2rem 2rem 0 0;padding:1.5rem 1.5rem 2.5rem;width:100%;max-width:540px;max-height:92svh;overflow-y:auto;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1);}
+.modal-overlay.open .modal-sheet{transform:none;}
+.modal-handle{width:36px;height:4px;background:var(--blush);border-radius:2px;margin:0 auto 1.25rem;}
+
+/* Product modal */
+.pmodal-img{width:100%;aspect-ratio:1/1;border-radius:1.5rem;display:flex;align-items:center;justify-content:center;font-size:5rem;margin-bottom:1rem;overflow:hidden;position:relative;}
+.pmodal-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.modal-name{font-family:'Pacifico',cursive;font-size:1.5rem;margin-bottom:0.3rem;}
+.modal-price{font-size:1.3rem;font-weight:700;color:var(--lavender);margin-bottom:0.75rem;}
+.modal-desc{font-size:0.87rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem;}
+.modal-label{font-size:0.72rem;font-weight:700;color:var(--muted);margin-bottom:0.4rem;letter-spacing:0.06em;text-transform:uppercase;}
+.color-swatches{display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;}
+.swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border 0.15s,transform 0.15s;}
+.swatch.active,.swatch:hover{border-color:var(--lavender);transform:scale(1.15);}
+.qty-row{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;}
+.qty-btn{background:var(--blush);border:none;border-radius:50%;width:34px;height:34px;font-size:1.1rem;cursor:pointer;color:var(--lavender);transition:background 0.15s;}
+.qty-btn:hover{background:var(--lavender);color:var(--white);}
+.qty-val{font-weight:700;font-size:1.05rem;color:var(--text);}
+.modal-add-btn{width:100%;background:var(--lavender);color:var(--white);border:none;border-radius:var(--radius-pill);padding:0.9rem;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background 0.2s,transform 0.15s;}
+.modal-add-btn:hover{background:#b89dd4;transform:scale(1.02);}
+
+/* Checkout form */
+.checkout-form h3{font-family:'Pacifico',cursive;font-size:1.4rem;margin-bottom:0.3rem;}
+.checkout-form .sub{font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem;}
+.form-group{margin-bottom:0.9rem;}
+.form-group label{display:block;font-size:0.75rem;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.35rem;}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:0.65rem 1rem;border-radius:1rem;border:1.5px solid var(--blush);background:var(--cream);font-family:'Nunito',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:border 0.2s;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--lavender);}
+.form-group textarea{resize:vertical;min-height:70px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.order-summary-mini{background:var(--blush);border-radius:1.2rem;padding:1rem 1.1rem;margin:1rem 0;}
+.order-summary-mini h4{font-size:0.75rem;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+.osi-row{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text);margin-bottom:0.25rem;}
+.osi-total{font-weight:700;color:var(--lavender);font-size:0.95rem;}
+.send-wa-btn{width:100%;background:linear-gradient(135deg,#25D366,#128C7E);color:var(--white);border:none;border-radius:var(--radius-pill);padding:0.95rem;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 4px 18px rgba(37,211,102,0.3);transition:opacity 0.2s,transform 0.15s;margin-top:0.5rem;}
+.send-wa-btn:hover{opacity:0.92;transform:scale(1.02);}
+.wa-note{font-size:0.73rem;color:var(--muted);text-align:center;margin-top:0.6rem;}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.5s,transform 0.5s;}
+.reveal.visible{opacity:1;transform:none;}
+.yarn-divider{text-align:center;font-size:1.4rem;margin:0.5rem 0;letter-spacing:0.4rem;opacity:0.3;}
+
+/* ══════════════════════════════
+   RESPONSIVE — MOBILE
+══════════════════════════════ */
+@media(max-width:768px){
+  nav{padding:0.75rem 1.1rem;}
+  .hero{padding:2.5rem 1.25rem 2rem;min-height:auto;}
+  .hero-inner{grid-template-columns:1fr;text-align:center;gap:1rem;}
+  .hero-right{font-size:6rem;}
+  .hero p{max-width:100%;}
+  .hero-btns{justify-content:center;}
+  .section{padding:2rem 1.1rem;}
+  .features-grid{grid-template-columns:repeat(3,1fr);}
+  .about-box{grid-template-columns:1fr;text-align:center;}
+  .footer-inner{grid-template-columns:1fr;}
+  .footer-col{text-align:center;}
+  .footer-social{justify-content:center;}
+  .product-grid{grid-template-columns:repeat(2,1fr);}
+  .testi-grid{grid-template-columns:1fr;}
+  .insta-grid{grid-template-columns:repeat(3,1fr);}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="blob-bg" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="#" class="nav-logo">Yarn<span>Goods</span></a>
+  <div class="nav-links">
+    <a href="#shop">Shop</a>
+    <a href="#about">About</a>
+    <a href="#instagram">Instagram</a>
+  </div>
+  <button class="nav-cart" id="cartBtn" aria-label="Open cart">
+    🛒 Cart <span class="cart-bubble" id="cartCount">0</span>
+  </button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">🌸 Handmade with love</div>
+      <h1>Cozy little <span class="accent">things</span><br>made just for you</h1>
+      <p>Soft crochet creations — bags, plushies, home goods & more. Each piece is unique & made with care. ✨</p>
+      <div class="hero-btns">
+        <a href="#shop" class="btn-primary">Shop Now 🧶</a>
+        <a href="#about" class="btn-secondary">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-right" aria-hidden="true">🧶</div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="section reveal">
+  <div class="page-wrap">
+    <div class="features-grid">
+      <div class="feature-pill"><span class="feature-icon">🌿</span><div class="feature-label">Eco Yarn</div><div class="feature-sub">natural fibers</div></div>
+      <div class="feature-pill"><span class="feature-icon">🤝</span><div class="feature-label">Handmade</div><div class="feature-sub">one by one</div></div>
+      <div class="feature-pill"><span class="feature-icon">📦</span><div class="feature-label">Cute Packing</div><div class="feature-sub">gift-ready</div></div>
+      <div class="feature-pill"><span class="feature-icon">💌</span><div class="feature-label">Custom Orders</div><div class="feature-sub">DM on IG</div></div>
+      <div class="feature-pill"><span class="feature-icon">🎨</span><div class="feature-label">Pick Colors</div><div class="feature-sub">your palette</div></div>
+      <div class="feature-pill"><span class="feature-icon">🚚</span><div class="feature-label">Ships Nationwide</div><div class="feature-sub">Pakistan-wide</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SHOP ═══ -->
+<section class="section reveal" id="shop">
+  <div class="page-wrap">
+    <div class="section-title">The Shop 🛍️</div>
+    <p class="section-sub">New arrivals added every week!</p>
+    <div class="categories" id="catList" role="list" style="margin-bottom:1.25rem;">
+      <button class="cat-pill active" data-cat="all">🌸 All</button>
+      <button class="cat-pill" data-cat="bags">👜 Bags</button>
+      <button class="cat-pill" data-cat="plushies">🧸 Plushies</button>
+      <button class="cat-pill" data-cat="home">🏡 Home</button>
+      <button class="cat-pill" data-cat="accessories">🎀 Accessories</button>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+</section>
+
+<div class="yarn-divider" aria-hidden="true">~ ~ ~ ~ ~</div>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="section reveal">
+  <div class="page-wrap">
+    <div class="section-title">Customer Love 💌</div>
+    <p class="section-sub">Real words from our cozy community</p>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="testi-quote">"</div><p class="testi-text">Ordered a frog plushie for my daughter — the quality is unbelievable. Soft, sturdy, and came wrapped so cutely! 🐸💚</p><div class="testi-author"><div class="testi-avatar">🌷</div><div><div class="testi-name">Fatima A.</div><div class="testi-stars">★★★★★</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"</div><p class="testi-text">The tote bag is so sturdy and adorable! I take it everywhere and get compliments every single day.</p><div class="testi-author"><div class="testi-avatar">🌼</div><div><div class="testi-name">Zara M.</div><div class="testi-stars">★★★★★</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"</div><p class="testi-text">I requested a custom color and she delivered perfectly. Packaging was the cutest unboxing experience ever 🎀</p><div class="testi-author"><div class="testi-avatar">🍓</div><div><div class="testi-name">Hana R.</div><div class="testi-stars">★★★★★</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INSTAGRAM ═══ -->
+<section class="section reveal" id="instagram">
+  <div class="page-wrap">
+    <div class="section-title">On Instagram 📸</div>
+    <p class="section-sub">Follow <strong>@theyarngoods</strong> for behind-the-scenes</p>
+    <div class="insta-grid">
+      <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" class="insta-tile bg-blush">🧶<div class="insta-overlay">@theyarngoods</div></a>
+      <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" class="insta-tile bg-lilac">🐸<div class="insta-overlay">@theyarngoods</div></a>
+      <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" class="insta-tile bg-mint">👜<div class="insta-overlay">@theyarngoods</div></a>
+      <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" class="insta-tile bg-butter">🌸<div class="insta-overlay">@theyarngoods</div></a>
+      <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" class="insta-tile bg-blush">🧸<div class="insta-overlay">@theyarngoods</div></a>
+      <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" class="insta-tile bg-lilac">🎀<div class="insta-overlay">@theyarngoods</div></a>
+    </div>
+    <p style="text-align:center;margin-top:1.1rem;font-size:0.85rem;color:var(--muted);font-weight:600;">
+      See more → <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" style="color:var(--lavender);text-decoration:none;font-weight:700;">@theyarngoods</a>
+    </p>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section class="section reveal" id="about">
+  <div class="page-wrap">
+    <div class="section-title">Hello, I'm YarnGoods 🌸</div>
+    <div style="height:0.75rem"></div>
+    <div class="about-box">
+      <div class="about-emoji">🧶</div>
+      <div class="about-text">
+        <h3>Made by hand, sent with love</h3>
+        <!-- ✏️ EDIT: change this paragraph to your own story -->
+        <p>Hi! I'm the maker behind YarnGoods — a small crochet business run from my home. Every piece is made by hand, with soft quality yarn and lots of love.<br><br>I believe handmade gifts carry something special that no factory-made item ever could 🌷<br><br>For custom orders, special sizes, or just to say hi — reach me on Instagram!</p>
+        <div style="margin-top:1.25rem;">
+          <a href="https://www.instagram.com/theyarngoods" target="_blank" rel="noopener" class="btn-primary">💬 DM for Custom Orders</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWSLETTER ═══ -->
+<section class="section reveal">
+  <div class="page-wrap">
+    <div class="newsletter-box">
+      <h3>Stay in the loop 🌼</h3>
+      <p>New drops, restocks & exclusive deals straight to your inbox</p>
+      <div class="nl-form">
+        <input type="email" class="nl-input" placeholder="your@email.com" aria-label="Email address">
+        <button class="nl-btn" type="button" id="nlBtn">Join ✨</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">YarnGoods</div>
+      <p>Handmade crochet goods made<br>with love, shipped across Pakistan 🧶</p>
+      <div class="footer-social">
+        <button class="social-btn" title="Instagram" onclick="window.open('https://www.instagram.com/theyarngoods','_blank')">📸</button>
+        <button class="social-btn" title="WhatsApp">💬</button>
+        <button class="social-btn" title="Email">✉️</button>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="#shop">All Products</a>
+      <a href="#shop">Bags</a>
+      <a href="#shop">Plushies</a>
+      <a href="#shop">Home Goods</a>
+      <a href="#shop">Accessories</a>
+    </div>
+    <div class="footer-col">
+      <h4>Info</h4>
+      <a href="#about">About Us</a>
+      <a href="#">Shipping Info</a>
+      <a href="#">Returns Policy</a>
+      <a href="https://www.instagram.com/theyarngoods" target="_blank">Custom Orders</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 YarnGoods · All pieces are handmade with 🩷</div>
+</footer>
+
+<!-- ═══ CART DRAWER ═══ -->
+<div class="cart-overlay" id="cartOverlay">
+  <div class="cart-drawer" role="dialog" aria-label="Your cart">
+    <div class="cart-header">
+      <h2>Your Cart 🛒</h2>
+      <button class="cart-close" id="cartClose" aria-label="Close cart">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amt" id="cartTotal">PKR 0</span>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn" disabled>
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.118 1.528 5.845L.057 23.885a.5.5 0 00.606.617l6.218-1.627A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.806 9.806 0 01-5.031-1.386l-.36-.214-3.733.977.999-3.645-.235-.375A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        Checkout via WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT MODAL ═══ -->
+<div class="modal-overlay" id="productModal" role="dialog" aria-modal="true" aria-label="Product details">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="pmodal-img" id="pmodalImg"></div>
+    <div class="modal-name" id="pmodalName"></div>
+    <div class="modal-price" id="pmodalPrice"></div>
+    <p class="modal-desc" id="pmodalDesc"></p>
+    <div class="modal-label">Colors available</div>
+    <div class="color-swatches" id="pmodalSwatches"></div>
+    <div class="modal-label">Quantity</div>
+    <div class="qty-row">
+      <button class="qty-btn" id="qtyMinus">−</button>
+      <span class="qty-val" id="qtyVal">1</span>
+      <button class="qty-btn" id="qtyPlus">+</button>
+    </div>
+    <button class="modal-add-btn" id="pmodalAddBtn">Add to Cart 🛒</button>
+  </div>
+</div>
+
+<!-- ═══ CHECKOUT FORM MODAL ═══ -->
+<div class="modal-overlay" id="checkoutModal" role="dialog" aria-modal="true" aria-label="Checkout">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="checkout-form">
+      <h3>Almost there! 🌸</h3>
+      <p class="sub">Fill in your details so we can confirm your order on WhatsApp</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <!-- ✏️ LABEL: change "Full Name" if you want a different label -->
+          <label for="cfName">Full Name *</label>
+          <input type="text" id="cfName" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="cfPhone">WhatsApp Number *</label>
+          <input type="tel" id="cfPhone" placeholder="03XX-XXXXXXX" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cfCity">City *</label>
+        <input type="text" id="cfCity" placeholder="e.g. Karachi, Lahore, Islamabad" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cfAddress">Delivery Address *</label>
+        <textarea id="cfAddress" placeholder="House/Flat no., Street, Area..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="cfNotes">Special Notes (optional)</label>
+        <textarea id="cfNotes" placeholder="Color preference, gift message, anything else..."></textarea>
+      </div>
+
+      <div class="order-summary-mini">
+        <h4>Order Summary</h4>
+        <div id="checkoutSummaryItems"></div>
+        <div style="border-top:1px solid var(--rose);margin-top:0.5rem;padding-top:0.5rem;" class="osi-row">
+          <span>Total</span><span class="osi-total" id="checkoutSummaryTotal"></span>
+        </div>
+      </div>
+
+      <button class="send-wa-btn" id="sendWaBtn">
+        <svg style="width:22px;height:22px;" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.118 1.528 5.845L.057 23.885a.5.5 0 00.606.617l6.218-1.627A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.806 9.806 0 01-5.031-1.386l-.36-.214-3.733.977.999-3.645-.235-.375A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        Send Order on WhatsApp
+      </button>
+      <p class="wa-note">WhatsApp will open with your order details pre-filled. We'll confirm and arrange payment from there 🌸</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   ⚙️  WHATSAPP SETUP
+   ──────────────────────────────────────────────────────────
+   Replace YOUR_WHATSAPP_NUMBER with your number.
+   Format: country code + number, NO spaces, NO + sign.
+   Pakistan example: 923001234567
+   (92 = Pakistan country code, then your 10-digit number)
+   ══════════════════════════════════════════════════════════ */
+const WHATSAPP_NUMBER = "YOUR_WHATSAPP_NUMBER";
+
+
+/* ══════════════════════════════════════════════════════════
+   🛍️  PRODUCTS — EDIT YOUR PRODUCTS HERE
+   ──────────────────────────────────────────────────────────
+   Each product has:
+     id       — unique number, don't repeat
+     cat      — "bags" | "plushies" | "home" | "accessories"
+     name     — product name shown on card
+     emoji    — shown as placeholder if no image
+     bg       — card background color: "bg-blush" | "bg-lilac" | "bg-mint" | "bg-butter"
+     image    — OPTIONAL: path to your image, e.g. "images/frog.jpg"
+                Leave as "" to use emoji placeholder
+     price    — number in PKR (used for total calculation)
+     priceLabel — what is shown to customer e.g. "PKR 1,200"
+     desc     — short product description
+     colors   — array of hex color swatches shown in product modal
+     badge    — text shown on badge e.g. "Bestseller" — leave "" for none
+     isNew    — true shows a green "New" badge, false hides it
+   ══════════════════════════════════════════════════════════ */
+const products = [
+  {
+    id:1, cat:"bags", name:"Mini Tote Bag", emoji:"👜", bg:"bg-blush", image:"",
+    price:1200, priceLabel:"PKR 1,200",
+    desc:"A super cute mini tote made with soft cotton yarn. Perfect for daily use or gifting!",
+    colors:["#f4b8b8","#c9aee8","#9ed8c4","#fef3d0"], badge:"", isNew:false
+  },
+  {
+    id:2, cat:"plushies", name:"Frog Plushie", emoji:"🐸", bg:"bg-mint", image:"",
+    price:850, priceLabel:"PKR 850",
+    desc:"The most adorable little frog you'll ever meet. Stuffed with premium filling, soft as a cloud!",
+    colors:["#9ed8c4","#5aba9a","#c9aee8","#fde8e8"], badge:"Bestseller", isNew:false
+  },
+  {
+    id:3, cat:"accessories", name:"Bow Hair Clip", emoji:"🎀", bg:"bg-lilac", image:"",
+    price:350, priceLabel:"PKR 350",
+    desc:"A dreamy crochet bow clip to add a little something special to any outfit.",
+    colors:["#c9aee8","#f4b8b8","#fde8e8","#fde4c8"], badge:"", isNew:true
+  },
+  {
+    id:4, cat:"home", name:"Flower Coaster Set", emoji:"🌸", bg:"bg-butter", image:"",
+    price:600, priceLabel:"PKR 600",
+    desc:"Set of 4 floral coasters — protect your table in the cutest possible way!",
+    colors:["#fef3d0","#fde8e8","#9ed8c4","#c9aee8"], badge:"", isNew:false
+  },
+  {
+    id:5, cat:"plushies", name:"Bunny Amigurumi", emoji:"🐰", bg:"bg-blush", image:"",
+    price:950, priceLabel:"PKR 950",
+    desc:"A fluffy little bunny with the most squishy ears. Comes with a tiny bow collar.",
+    colors:["#fde8e8","#ffffff","#c9aee8","#fef3d0"], badge:"Bestseller", isNew:false
+  },
+  {
+    id:6, cat:"bags", name:"Bucket Bag", emoji:"🪣", bg:"bg-lilac", image:"",
+    price:1800, priceLabel:"PKR 1,800",
+    desc:"A roomy bucket bag in chunky stitch. Fits everything + your whole personality.",
+    colors:["#c9aee8","#fde8e8","#9ed8c4","#fde4c8"], badge:"", isNew:true
+  },
+  {
+    id:7, cat:"home", name:"Plant Pot Hanger", emoji:"🪴", bg:"bg-mint", image:"",
+    price:450, priceLabel:"PKR 450",
+    desc:"Boho-style plant holder made with natural jute-blend yarn. For small to medium pots.",
+    colors:["#d6f5ec","#fde4c8","#fef3d0","#fde8e8"], badge:"", isNew:false
+  },
+  {
+    id:8, cat:"accessories", name:"Scrunchie Bundle", emoji:"🌷", bg:"bg-butter", image:"",
+    price:400, priceLabel:"PKR 400",
+    desc:"Set of 3 crochet scrunchies in complementary colors. Perfect for gifting!",
+    colors:["#f4b8b8","#c9aee8","#9ed8c4"], badge:"", isNew:true
+  },
+];
+
+/* ─────────────────────────────── */
+/* APP STATE                       */
+/* ─────────────────────────────── */
+let cart = [];
+let activeFilter = "all";
+let qty = 1;
+let currentProduct = null;
+let selectedColor = null;
+
+/* ─────────────────────────────── */
+/* RENDER PRODUCTS                 */
+/* ─────────────────────────────── */
+function renderProducts(filter) {
+  const grid = document.getElementById("productGrid");
+  const filtered = filter === "all" ? products : products.filter(p => p.cat === filter);
+  grid.innerHTML = filtered.map(p => `
+    <div class="product-card reveal" data-id="${p.id}" tabindex="0" role="button" aria-label="View ${p.name}">
+      <div class="product-img-placeholder ${p.bg}">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : `<span aria-hidden="true" style="font-size:4rem;position:relative;z-index:1">${p.emoji}</span>`}
+        ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ""}
+        ${p.isNew ? `<span class="card-badge new">New</span>` : ""}
+        <button class="card-fav" aria-label="Wishlist" onclick="event.stopPropagation()">🤍</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc.substring(0,55)}…</div>
+        <div class="card-footer">
+          <span class="card-price">${p.priceLabel}</span>
+          <button class="card-add" aria-label="Add ${p.name}" onclick="event.stopPropagation();quickAddToCart(${p.id})">+</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  grid.querySelectorAll(".product-card").forEach(card => {
+    card.addEventListener("click", () => openProductModal(parseInt(card.dataset.id)));
+    card.addEventListener("keydown", e => { if(e.key==="Enter") openProductModal(parseInt(card.dataset.id)); });
+  });
+
+  setTimeout(() => grid.querySelectorAll(".reveal").forEach(el => el.classList.add("visible")), 60);
+}
+
+/* ─────────────────────────────── */
+/* CART LOGIC                      */
+/* ─────────────────────────────── */
+function addToCart(product, quantity, color) {
+  const existing = cart.find(i => i.id === product.id && i.color === color);
+  if(existing) { existing.qty += quantity; }
+  else { cart.push({ id:product.id, name:product.name, emoji:product.emoji, bg:product.bg, price:product.price, priceLabel:product.priceLabel, qty:quantity, color:color || "Default" }); }
+  updateCartUI();
+}
+
+function quickAddToCart(id) {
+  const p = products.find(x => x.id === id);
+  addToCart(p, 1, p.colors[0]);
+  showToast(`${p.name} added to cart 🎉`);
+}
+
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  updateCartUI();
+  renderCartItems();
+}
+
+function changeQty(idx, delta) {
+  cart[idx].qty = Math.max(1, cart[idx].qty + delta);
+  updateCartUI();
+  renderCartItems();
+}
+
+function cartTotal() {
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+}
+
+function updateCartUI() {
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById("cartCount").textContent = total;
+  document.getElementById("cartTotal").textContent = `PKR ${cartTotal().toLocaleString()}`;
+  const btn = document.getElementById("checkoutBtn");
+  btn.disabled = cart.length === 0;
+}
+
+function renderCartItems() {
+  const el = document.getElementById("cartItems");
+  if(cart.length === 0) {
+    el.innerHTML = `<div class="cart-empty"><span class="empty-icon">🧺</span>Your cart is empty!<br>Add something cozy 🌸</div>`;
+    return;
+  }
+  el.innerHTML = cart.map((item, idx) => `
+    <div class="cart-item">
+      <div class="ci-img ${item.bg}"><span aria-hidden="true">${item.emoji}</span></div>
+      <div>
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-color">Color: <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${item.color};vertical-align:middle;border:1px solid #eee"></span></div>
+        <div class="ci-qty-row">
+          <button class="ci-qty-btn" onclick="changeQty(${idx},-1)">−</button>
+          <span class="ci-qty">${item.qty}</span>
+          <button class="ci-qty-btn" onclick="changeQty(${idx},1)">+</button>
+          <button class="ci-remove" onclick="removeFromCart(${idx})">✕ remove</button>
+        </div>
+      </div>
+      <div class="ci-price">PKR ${(item.price*item.qty).toLocaleString()}</div>
+    </div>
+  `).join("");
+}
+
+/* ─────────────────────────────── */
+/* CART DRAWER OPEN/CLOSE          */
+/* ─────────────────────────────── */
+function openCart() {
+  renderCartItems();
+  updateCartUI();
+  document.getElementById("cartOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeCart() {
+  document.getElementById("cartOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.getElementById("cartBtn").addEventListener("click", openCart);
+document.getElementById("cartClose").addEventListener("click", closeCart);
+document.getElementById("cartOverlay").addEventListener("click", e => { if(e.target===document.getElementById("cartOverlay")) closeCart(); });
+
+/* ─────────────────────────────── */
+/* PRODUCT MODAL                   */
+/* ─────────────────────────────── */
+function openProductModal(id) {
+  currentProduct = products.find(p => p.id === id);
+  qty = 1;
+  selectedColor = currentProduct.colors[0];
+  document.getElementById("qtyVal").textContent = 1;
+
+  const imgEl = document.getElementById("pmodalImg");
+  imgEl.className = `pmodal-img ${currentProduct.bg}`;
+  imgEl.innerHTML = currentProduct.image
+    ? `<img src="${currentProduct.image}" alt="${currentProduct.name}">`
+    : `<span aria-hidden="true">${currentProduct.emoji}</span>`;
+
+  document.getElementById("pmodalName").textContent = currentProduct.name;
+  document.getElementById("pmodalPrice").textContent = currentProduct.priceLabel;
+  document.getElementById("pmodalDesc").textContent = currentProduct.desc;
+
+  const sw = document.getElementById("pmodalSwatches");
+  sw.innerHTML = currentProduct.colors.map((c,i) =>
+    `<div class="swatch${i===0?" active":""}" style="background:${c}" data-color="${c}" tabindex="0" role="radio" aria-checked="${i===0}" aria-label="Color option ${i+1}"></div>`
+  ).join("");
+  sw.querySelectorAll(".swatch").forEach(s => {
+    s.addEventListener("click", () => {
+      sw.querySelectorAll(".swatch").forEach(x => { x.classList.remove("active"); x.setAttribute("aria-checked","false"); });
+      s.classList.add("active"); s.setAttribute("aria-checked","true");
+      selectedColor = s.dataset.color;
+    });
+  });
+
+  document.getElementById("productModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeProductModal() {
+  document.getElementById("productModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+document.getElementById("productModal").addEventListener("click", e => { if(e.target===document.getElementById("productModal")) closeProductModal(); });
+document.getElementById("qtyMinus").addEventListener("click", () => { if(qty>1){qty--;document.getElementById("qtyVal").textContent=qty;} });
+document.getElementById("qtyPlus").addEventListener("click",  () => { qty++;document.getElementById("qtyVal").textContent=qty; });
+document.getElementById("pmodalAddBtn").addEventListener("click", () => {
+  addToCart(currentProduct, qty, selectedColor);
+  showToast(`${qty}x ${currentProduct.name} added! 🎉`);
+  closeProductModal();
+});
+
+/* ─────────────────────────────── */
+/* CHECKOUT MODAL                  */
+/* ─────────────────────────────── */
+function openCheckout() {
+  closeCart();
+  // populate summary
+  document.getElementById("checkoutSummaryItems").innerHTML = cart.map(i =>
+    `<div class="osi-row"><span>${i.name} x${i.qty}</span><span>PKR ${(i.price*i.qty).toLocaleString()}</span></div>`
+  ).join("");
+  document.getElementById("checkoutSummaryTotal").textContent = `PKR ${cartTotal().toLocaleString()}`;
+  document.getElementById("checkoutModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeCheckout() {
+  document.getElementById("checkoutModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+document.getElementById("checkoutBtn").addEventListener("click", openCheckout);
+document.getElementById("checkoutModal").addEventListener("click", e => { if(e.target===document.getElementById("checkoutModal")) closeCheckout(); });
+
+/* ─────────────────────────────── */
+/* SEND TO WHATSAPP                 */
+/* ─────────────────────────────── */
+document.getElementById("sendWaBtn").addEventListener("click", () => {
+  const name    = document.getElementById("cfName").value.trim();
+  const phone   = document.getElementById("cfPhone").value.trim();
+  const city    = document.getElementById("cfCity").value.trim();
+  const address = document.getElementById("cfAddress").value.trim();
+  const notes   = document.getElementById("cfNotes").value.trim();
+
+  if(!name || !phone || !city || !address) {
+    showToast("Please fill in all required fields 🌸");
+    return;
+  }
+
+  // Build the WhatsApp message
+  let msg = `🧶 *New Order — YarnGoods*\n\n`;
+  msg += `*Customer Details*\n`;
+  msg += `👤 Name: ${name}\n`;
+  msg += `📱 WhatsApp: ${phone}\n`;
+  msg += `🏙️ City: ${city}\n`;
+  msg += `📦 Address: ${address}\n`;
+  if(notes) msg += `📝 Notes: ${notes}\n`;
+  msg += `\n*Order Items*\n`;
+  cart.forEach(i => {
+    msg += `• ${i.name} x${i.qty} — PKR ${(i.price*i.qty).toLocaleString()}\n`;
+  });
+  msg += `\n💰 *Total: PKR ${cartTotal().toLocaleString()}*\n`;
+  msg += `\n_(Sent from YarnGoods website)_`;
+
+  const encoded = encodeURIComponent(msg);
+  const waURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+
+  if(WHATSAPP_NUMBER === "YOUR_WHATSAPP_NUMBER") {
+    showToast("⚠️ Add your WhatsApp number in the code first!");
+    return;
+  }
+
+  window.open(waURL, "_blank");
+
+  // Clear cart after sending
+  cart = [];
+  updateCartUI();
+  closeCheckout();
+  showToast("Order sent! We'll confirm shortly 🌸");
+});
+
+/* ─────────────────────────────── */
+/* CATEGORIES FILTER               */
+/* ─────────────────────────────── */
+document.getElementById("catList").addEventListener("click", e => {
+  const btn = e.target.closest(".cat-pill");
+  if(!btn) return;
+  document.querySelectorAll(".cat-pill").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  activeFilter = btn.dataset.cat;
+  renderProducts(activeFilter);
+});
+
+/* ─────────────────────────────── */
+/* WISHLIST HEART TOGGLE            */
+/* ─────────────────────────────── */
+document.addEventListener("click", e => {
+  const fav = e.target.closest(".card-fav");
+  if(!fav) return;
+  fav.textContent = fav.textContent.trim() === "🩷" ? "🤍" : "🩷";
+});
+
+/* ─────────────────────────────── */
+/* NEWSLETTER                      */
+/* ─────────────────────────────── */
+document.getElementById("nlBtn").addEventListener("click", () => {
+  const input = document.querySelector(".nl-input");
+  if(input.value.includes("@")) {
+    showToast("Subscribed! Welcome to the cozy club 🌸");
+    input.value = "";
+  } else {
+    showToast("Please enter a valid email 💌");
+  }
+});
+
+/* ─────────────────────────────── */
+/* TOAST                            */
+/* ─────────────────────────────── */
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+/* ─────────────────────────────── */
+/* SCROLL REVEAL                    */
+/* ─────────────────────────────── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add("visible"); });
+}, { threshold: 0.08 });
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+/* INIT */
+renderProducts("all");
+updateCartUI();
+</script>
+</body>
+</html>
