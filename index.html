@@ -42,7 +42,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);o
 
 /* ── BLOBS ── */
 .blob-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-.blob-bg span{position:absolute;border-radius:50%;opacity:0.18;filter:blur(60px);animation:blobdrift 18s ease-in-out infinite alternate;}
+.blob-bg span{position:absolute;border-radius:50%;opacity:0.18;filter:blur(35px);animation:blobdrift 30s linear infinite alternate;}
 .blob-bg span:nth-child(1){width:420px;height:420px;background:var(--rose);top:-80px;left:-100px;animation-delay:0s;}
 .blob-bg span:nth-child(2){width:320px;height:320px;background:var(--lavender);top:30%;right:-80px;animation-delay:-6s;}
 .blob-bg span:nth-child(3){width:280px;height:280px;background:var(--sage);bottom:10%;left:5%;animation-delay:-12s;}
@@ -50,14 +50,33 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);o
 @keyframes blobdrift{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-30px) scale(1.08);}}
 
 /* ── NAV ── */
-nav{position:sticky;top:0;z-index:100;background:rgba(253,248,240,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1.5px solid var(--rose);padding:0.75rem 2rem;display:flex;align-items:center;justify-content:space-between;animation:slideDown 0.5s ease;}
+nav{position:sticky;top:0;z-index:100;background:rgba(253,248,240,0.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1.5px solid var(--rose);padding:0.75rem 2rem;display:flex;align-items:center;justify-content:space-between;animation:slideDown 0.5s ease;}
 @keyframes slideDown{from{transform:translateY(-100%);opacity:0;}to{transform:none;opacity:1;}}
 .nav-logo{font-family:'Pacifico',cursive;font-size:1.5rem;color:var(--lavender);text-decoration:none;}
 .nav-logo span{color:var(--rose);}
 .nav-links{display:flex;gap:0.4rem;align-items:center;}
 .nav-links a{font-size:0.82rem;font-weight:600;color:var(--muted);text-decoration:none;padding:0.35rem 0.8rem;border-radius:var(--radius-pill);transition:background 0.2s,color 0.2s;}
 .nav-links a:hover{background:var(--blush);color:var(--text);}
-.nav-cart{background:var(--lavender);color:var(--white);border:none;border-radius:var(--radius-pill);padding:0.45rem 1.1rem;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;transition:transform 0.15s,background 0.2s;display:flex;align-items:center;gap:0.4rem;}
+.nav-cart{
+background:var(--lavender);
+color:var(--white);
+border:none;
+border-radius:var(--radius-pill);
+padding:0.38rem 0.85rem;
+font-family:'Nunito',sans-serif;
+font-size:0.75rem;
+font-weight:700;
+cursor:pointer;
+transition:transform 0.15s,background 0.2s;
+display:flex;
+align-items:center;
+gap:0.35rem;
+position:fixed;
+top:14px;
+right:14px;
+z-index:999;
+box-shadow:0 4px 14px rgba(0,0,0,0.12);
+}
 .nav-cart:hover{background:#b89dd4;transform:scale(1.04);}
 .cart-bubble{background:var(--rose);color:var(--white);border-radius:50%;width:20px;height:20px;font-size:0.68rem;display:flex;align-items:center;justify-content:center;font-weight:700;}
 
@@ -580,9 +599,19 @@ body{
     </div>
     <div class="cart-items" id="cartItems"></div>
     <div class="cart-footer">
-      <div class="cart-total-row">
-        <span class="cart-total-label">Total</span>
-        <span class="cart-total-amt" id="cartTotal">PKR 0</span>
+      <div style="display:flex;flex-direction:column;gap:0.45rem;margin-bottom:1rem;">
+        <div class="cart-total-row">
+          <span class="cart-total-label">Subtotal</span>
+          <span class="cart-total-label" id="cartSubtotal">PKR 0</span>
+        </div>
+        <div class="cart-total-row">
+          <span class="cart-total-label">Delivery</span>
+          <span class="cart-total-label">PKR 299</span>
+        </div>
+        <div class="cart-total-row" style="padding-top:0.5rem;border-top:1px solid var(--rose);">
+          <span class="cart-total-label" style="font-weight:800;color:var(--text);">Total</span>
+          <span class="cart-total-amt" id="cartTotal">PKR 0</span>
+        </div>
       </div>
       <button class="checkout-btn" id="checkoutBtn" disabled>
         <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.118 1.528 5.845L.057 23.885a.5.5 0 00.606.617l6.218-1.627A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.806 9.806 0 01-5.031-1.386l-.36-.214-3.733.977.999-3.645-.235-.375A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
@@ -634,7 +663,20 @@ body{
 
       <div class="form-group">
         <label for="cfCity">City *</label>
-        <input type="text" id="cfCity" placeholder="e.g. Karachi, Lahore, Islamabad" required>
+        <select id="cfCity" required>
+            <option value="">Select Karachi Area</option>
+            <option>DHA Karachi</option>
+            <option>Clifton</option>
+            <option>Gulshan-e-Iqbal</option>
+            <option>North Nazimabad</option>
+            <option>Federal B Area</option>
+            <option>Malir</option>
+            <option>Korangi</option>
+            <option>Bahadurabad</option>
+            <option>Saddar</option>
+            <option>PECHS</option>
+          </select>
+          <small style="display:block;margin-top:0.4rem;color:var(--muted);font-size:0.72rem;">🚚 Currently delivering only in Karachi</small>
       </div>
 
       <div class="form-group">
@@ -676,7 +718,7 @@ body{
    Pakistan example: 923001234567
    (92 = Pakistan country code, then your 10-digit number)
    ══════════════════════════════════════════════════════════ */
-const WHATSAPP_NUMBER = "923332369143";
+const WHATSAPP_NUMBER = "923331234567";
 
 
 /* ══════════════════════════════════════════════════════════
@@ -756,6 +798,11 @@ let activeFilter = "all";
 let qty = 1;
 let currentProduct = null;
 let selectedColor = null;
+const DELIVERY_FEE = 299;
+    
+function subtotalOnly() {
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+}
 
 /* ─────────────────────────────── */
 /* RENDER PRODUCTS                 */
@@ -819,12 +866,14 @@ function changeQty(idx, delta) {
 }
 
 function cartTotal() {
-  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  return subtotal + (cart.length ? DELIVERY_FEE : 0);
 }
 
 function updateCartUI() {
   const total = cart.reduce((s,i)=>s+i.qty,0);
   document.getElementById("cartCount").textContent = total;
+  document.getElementById("cartSubtotal").textContent = `PKR ${subtotalOnly().toLocaleString()}`;
   document.getElementById("cartTotal").textContent = `PKR ${cartTotal().toLocaleString()}`;
   const btn = document.getElementById("checkoutBtn");
   btn.disabled = cart.length === 0;
@@ -929,7 +978,11 @@ function openCheckout() {
   document.getElementById("checkoutSummaryItems").innerHTML = cart.map(i =>
     `<div class="osi-row"><span>${i.name} x${i.qty}</span><span>PKR ${(i.price*i.qty).toLocaleString()}</span></div>`
   ).join("");
-  document.getElementById("checkoutSummaryTotal").textContent = `PKR ${cartTotal().toLocaleString()}`;
+  document.getElementById("checkoutSummaryTotal").innerHTML = `
+  Subtotal: PKR ${subtotalOnly().toLocaleString()}<br>
+  Delivery: PKR ${DELIVERY_FEE}<br>
+  <strong>Total: PKR ${cartTotal().toLocaleString()}</strong>
+`;
   document.getElementById("checkoutModal").classList.add("open");
   document.body.style.overflow = "hidden";
 }
@@ -969,7 +1022,9 @@ document.getElementById("sendWaBtn").addEventListener("click", () => {
   cart.forEach(i => {
     msg += `• ${i.name} x${i.qty} — PKR ${(i.price*i.qty).toLocaleString()}\n`;
   });
-  msg += `\n💰 *Total: PKR ${cartTotal().toLocaleString()}*\n`;
+  msg += `\n🧾 Subtotal: PKR ${subtotalOnly().toLocaleString()}\n`;
+  msg += `🚚 Delivery: PKR ${DELIVERY_FEE}\n`;
+  msg += `💰 *Total: PKR ${cartTotal().toLocaleString()}*\n`;
   msg += `\n_(Sent from YarnGoods website)_`;
 
   const encoded = encodeURIComponent(msg);
@@ -1048,3 +1103,23 @@ updateCartUI();
 </script>
 </body>
 </html>
+
+<style>
+@media (max-width:768px){
+  .nav-cart{
+    width:auto !important;
+    padding:0.42rem 0.8rem;
+    top:10px;
+    right:10px;
+  }
+
+  .cart-total-amt{
+    font-size:1.1rem;
+  }
+
+  .checkout-btn,
+  .send-wa-btn{
+    font-size:0.92rem;
+  }
+}
+</style>
